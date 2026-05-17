@@ -3,8 +3,12 @@ include_guard(GLOBAL)
 
 project(api LANGUAGES C)
 
-add_library(api INTERFACE)
+add_library(api STATIC)
 
-target_include_directories(api INTERFACE
+target_sources(api PRIVATE
+	api.c
+)
+
+target_include_directories(api PUBLIC
 	${CMAKE_CURRENT_SOURCE_DIR}
 )
