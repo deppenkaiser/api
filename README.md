@@ -1,1 +1,44 @@
-# api
+# api – Access-Control-Makros für C
+
+Header-basierte Visibility-Emulation für C: `private`, `protected`,
+`callback` als Makros, damit klassen-typische Kapselung und überschreibbare
+Callbacks in C klar ausdrückbar sind.
+
+## Umfang
+
+- **`private`** → `static`: nur in der eigenen Übersetzungseinheit (`this.c`)
+  sichtbar (Hilfsfunktionen/-typen).
+- **`protected`** → (leer): Kennzeichnung „bibliotheksintern" in der
+  Definition (`*.c`).
+- **`protected_import(type, function)`** → `extern type function`: Import
+  einer geschützten Funktion in die Übersetzungseinheit.
+- **`callback`** → (leer): virtueller Callback, den die Anwendung liefert.
+- **`callback_declaration(type, function)`** → `extern type function
+  __attribute__((weak))`: voreinstellbare (weak) Callback-Deklaration des
+  Moduls (`*.h`) – von der Anwendung überschreibbar.
+
+## Nutzung
+
+```c
+#include <api/api.h>
+
+private void helfer(void) { /* nur in dieser .c */ }
+protected void kern(void) { /* bibliotheksintern */ }
+
+callback void app_hook(void);          /* von der Anwendung definiert */
+callback_declaration(void, app_hook);  /* weak-Default im Modul */
+```
+
+## Abhängigkeiten
+
+Keine weiteren Projekt-Bibliotheken.
+
+## Build
+
+```bash
+cmake -S . -B build
+cmake --build build
+```
+
+In ein Projekt einbinden: `add_subdirectory(../../libraries/api …)`,
+Einbindung des Headers über den Include-Pfad `<api/api.h>`.
