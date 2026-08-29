@@ -44,3 +44,7 @@ cmake --build build
 
 In ein Projekt einbinden: `add_subdirectory(../../libraries/api …)`,
 Einbindung des Headers über den Include-Pfad `<api/api.h>`.
+
+## Wiki
+
+Dokumentation: [api – C++-ähnliche Lesbarkeit in C](https://czybor.i234.me/wiki/sw-module/api/) (Quartz-Wiki)
