@@ -1,8 +1,10 @@
-# api – Access-Control-Makros für C
+# api – C++-ähnliche Lesbarkeit in C
 
-Header-basierte Visibility-Emulation für C: `private`, `protected`,
-`callback` als Makros, damit klassen-typische Kapselung und überschreibbare
-Callbacks in C klar ausdrückbar sind.
+Header-basierte Makro-Bibliothek, die C **C++-ähnliche Vorteile** verschafft –
+zumindest was die **Lesbarkeit** angeht: `private`/`protected`-Sichtbarkeit
+und überschreibbare `callback`s machen klassen-typische Kapselung und
+virtuelle Hooks ohne OOP-Overhead direkt im Quelltext ausdrückbar. Rein C,
+keine Laufzeit, kein Overhead.
 
 ## Umfang
 
