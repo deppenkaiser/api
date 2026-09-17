@@ -7,4 +7,3 @@
 #define callback_declaration(type, function) extern type function __attribute__((weak))	// virtual callback declaration in this.lib (*.h)
 
 #define PRIVATE_FUNC(type, function)        static type _##function
-#define PUBLIC_FUNC(type, modul, function)  type modul##_##function
