@@ -7,3 +7,6 @@
 
 #define callback																		// virtual callback in application
 #define callback_declaration(type, function) extern type function __attribute__((weak))	// virtual callback declaration in this.lib (*.h)
+
+#define STATIC_FUNC(type, function)         static type _##function
+#define EXPORT_FUNC(type, modul, function)  type modul##_##function
