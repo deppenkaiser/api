@@ -1,6 +1,5 @@
 #pragma once
 
-#define protected																		// protected in this.lib definition (*.c)
 #define protected_import(type, function) extern type function							// protected in this.lib declaration (*.h)
 
 #define callback																		// virtual callback in application
