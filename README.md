@@ -18,6 +18,31 @@ keine Laufzeit, kein Overhead.
 - **`callback_declaration(type, function)`** → `extern type function
   __attribute__((weak))`: voreinstellbare (weak) Callback-Deklaration des
   Moduls (`*.h`) – von der Anwendung überschreibbar.
+- **Stack-/Heap-Pointer-Typen** für Primitive: kodieren Nullability im Typ.
+
+## Stack-/Heap-Pointer-Semantik
+
+```c
+typedef bool* const bool_stack_t, *bool_heap_t;
+typedef int16_t* const int16_stack_t, *int16_heap_t;
+typedef uint16_t* const uint16_stack_t, *uint16_heap_t;
+typedef int32_t* const int32_stack_t, *int32_heap_t;
+typedef uint32_t* const uint32_stack_t, *uint32_heap_t;
+typedef float* const float_stack_t, *float_heap_t;
+typedef double* const double_stack_t, *double_heap_t;
+```
+
+- `x_stack_t` (const): zeigt auf Caller-allokierten Speicher (Stack).
+  Per Definition **nie NULL** → keine NULL-Prüfung erforderlich.
+- `x_heap_t` (non-const): zeigt auf Heap-Speicher. **Kann NULL sein** →
+  NULL-Prüfung Pflicht.
+- **Promotion:** Aus einem `x_heap_t` kann nach bestandener NULL-Prüfung
+  ein `x_stack_t` werden — für den Konsumenten ist dann garantiert:
+  gültig, kein Check nötig.
+- Out-Parameter (Aufrufer-Stack) verwenden die `_stack_t`-Varianten.
+
+Strukturen folgen demselben Muster paarweise:
+`typedef struct foo { ... }* const foo_stack_t, *foo_heap_t;`
 
 ## Nutzung
 
