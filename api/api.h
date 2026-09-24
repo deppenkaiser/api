@@ -11,6 +11,8 @@
 #define PRIVATE_FUNC(type, function)        static type _##function
 
 typedef bool* const bool_stack_t, *bool_heap_t;
+typedef int16_t* const int16_stack_t, *int16_heap_t;
+typedef uint16_t* const uint16_stack_t, *uint16_heap_t;
 typedef int32_t* const int32_stack_t, *int32_heap_t;
 typedef uint32_t* const uint32_stack_t, *uint32_heap_t;
 typedef float* const float_stack_t, *float_heap_t;
