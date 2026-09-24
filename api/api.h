@@ -1,8 +1,19 @@
 #pragma once
 
+#include <stdint.h>
+#include <stdbool.h>
+
 #define protected_import(type, function) extern type function							// protected in this.lib declaration (*.h)
 
 #define callback																		// virtual callback in application
 #define callback_declaration(type, function) extern type function __attribute__((weak))	// virtual callback declaration in this.lib (*.h)
 
 #define PRIVATE_FUNC(type, function)        static type _##function
+
+typedef bool* const bool_stack_t, *bool_heap_t;
+typedef int32_t* const int32_stack_t, *int32_heap_t;
+typedef uint32_t* const uint32_stack_t, *uint32_heap_t;
+typedef float* const float_stack_t, *float_heap_t;
+typedef double* const double_stack_t, *double_heap_t;
+
+// Aus einem x_heap_t Pointer kann nach NULL-Prüfung ein x_stack_t werden!
