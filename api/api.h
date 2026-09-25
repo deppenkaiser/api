@@ -23,7 +23,7 @@ typedef double* const double_stack_t, *double_heap_t;
 #define CLASS(class_name) typedef struct class_##class_name* class_##class_name##_heap_t;\
 					struct class_##class_name
 
-#define CLASS_METHOD_PTR_DECL(class_name, type, function, arguments)	typedef type (*class_##class_name##_##function##_stack_t)(arguments);\
-																		PRIVATE_FUNC(type, function(arguments))
+#define CLASS_METHOD_PTR_DECL(class_name, type, function, ...)	typedef type (*class_##class_name##_##function##_stack_t)(__VA_ARGS__);\
+																PRIVATE_FUNC(type, function(__VA_ARGS__))
 
 #define CLASS_METHOD(class_name, type, function) type class_##class_name##_##function
