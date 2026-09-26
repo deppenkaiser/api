@@ -19,6 +19,18 @@ typedef float* const float_stack_t, *float_heap_t;
 typedef double* const double_stack_t, *double_heap_t;
 
 // Aus einem x_heap_t Pointer kann nach NULL-Prüfung ein x_stack_t werden!
+//
+// _stack_t bedeutet: der Zeiger ist gueltig, ein NULL-Test ist nicht noetig. Es gibt zwei Sorten:
+//
+//  1. Struct-Zeiger (meist auf dem Stack des Aufrufers): typedef struct foo {...}* const foo_stack_t;
+//     Der const ist das Merkmal dieser Sorte — der Konsument schreibt nicht hindurch.
+//  2. Funktionszeiger (in CLASS): CLASS_METHOD_PTR_DECL erzeugt class_foo_bar_stack_t. Hier ist
+//     NICHTS const; die Zusage ist, dass new() jeden Methodenzeiger setzt (new() macht zwei Dinge:
+//     malloc(sizeof(struct class_foo)) und das Initialisieren der Funktionszeiger). Ein solches
+//     Objekt darf seine Methoden also ohne vorherige Pruefung aufrufen.
+//
+// NULL-faehige Rueckgaben sind immer x_heap_t (nie x_stack_t), NULL-faehige Member sind
+// struct foo* — die _stack_t-Zusage gilt nur fuer gepruefte Zeiger.
 
 #define CLASS(class_name) typedef struct class_##class_name* class_##class_name##_heap_t;\
 					struct class_##class_name
