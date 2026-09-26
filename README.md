@@ -18,6 +18,11 @@ keine Laufzeit, kein Overhead.
 - **`callback_declaration(type, function)`** → `extern type function
   __attribute__((weak))`: voreinstellbare (weak) Callback-Deklaration des
   Moduls (`*.h`) – von der Anwendung überschreibbar.
+- **`PRIVATE_FUNC(type, function)`** → `static type _##function`: Forward-
+  Deklaration einer dateiinternen Funktion (`_name`) am Dateikopf — die
+  Definition steht gesammelt am Dateiende.
+- **`CLASS(name)`**, **`CLASS_METHOD_PTR_DECL(...)`**, **`CLASS_METHOD(...)`**:
+  „C-Klassen" aus Datenstruktur + Methodenzeigern (siehe unten).
 - **Stack-/Heap-Pointer-Typen** für Primitive: kodieren Nullability im Typ.
 
 ## Stack-/Heap-Pointer-Semantik
@@ -43,6 +48,46 @@ typedef double* const double_stack_t, *double_heap_t;
 
 Strukturen folgen demselben Muster paarweise:
 `typedef struct foo { ... }* const foo_stack_t, *foo_heap_t;`
+
+## Klassen (CLASS-Makros)
+
+Für „C-Klassen" — Datenstruktur plus Methodenzeiger, die der Konstruktor
+installiert. Beispiel: `vulkan_gui/textures/class_texture.h`.
+
+```c
+// *.h
+struct class_texture;                                                   // Forward-Deklaration
+CLASS_METHOD_PTR_DECL(texture, bool, load, struct class_texture* object,
+                      class_texture_context_stack_t context, const char* path);
+CLASS_METHOD_PTR_DECL(texture, void, destroy, struct class_texture* object);
+
+CLASS(texture)          // struct class_texture + typedef class_texture_heap_t
+{
+	class_texture_heap_t this;
+	class_texture_load_stack_t load;      // Methoden, vom Konstruktor installiert
+	class_texture_destroy_stack_t destroy;
+};
+
+CLASS_METHOD(texture, class_texture_heap_t, new());   // class_texture_new()
+
+// *.c — Standardimplementierung selbst anmelden
+PRIVATE_FUNC(bool, load(struct class_texture* object, ..., const char* path));
+```
+
+Regeln, die aus den Makros folgen:
+
+- `CLASS(name)` erzeugt **nur** `class_<name>_heap_t` plus die Struktur. Ein
+  Stack-Typ muss bei Bedarf von Hand ergänzt werden:
+  `typedef struct class_foo* const class_foo_stack_t;`
+- `CLASS_METHOD_PTR_DECL` ist **variadisch** und erzeugt **nur** den
+  Zeigertyp `class_<name>_<f>_stack_t` — keine Deklaration. Mehrparametrige
+  Methoden deshalb **ohne** eigene Klammern notieren.
+- Die Standardimplementierung meldet die `.c`-Datei per `PRIVATE_FUNC` an.
+  Eine `static`-Deklaration im Header ist verboten: sie kollidiert, sobald
+  zwei Klassen eine gleichnamige Methode haben (`_destroy` gibt es in
+  `class_texture` und `class_object`).
+- `CLASS_METHOD(name, type, f)` liefert den Namen für die öffentliche
+  Definition (`class_<name>_<f>`).
 
 ## Nutzung
 
