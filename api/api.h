@@ -38,6 +38,6 @@ typedef double* const double_stack_t, *double_heap_t;
 // Der zugehoerige Zeigertyp wird hier erzeugt; die Standardimplementierung meldet die
 // .c-Datei selbst per PRIVATE_FUNC an (eine static-Deklaration im Header wuerde bei zwei
 // Klassen mit gleichnamiger Methode kollidieren).
-#define CLASS_METHOD_PTR_DECL(class_name, type, function, ...)	typedef type (*class_##class_name##_##function##_stack_t)(__VA_ARGS__)
+#define CLASS_METHOD_PTR_DECL(class_name, type, function, ...)	typedef type (*class_##class_name##_##function##_fptr_t)(__VA_ARGS__)
 
 #define CLASS_METHOD(class_name, type, function) type class_##class_name##_##function
