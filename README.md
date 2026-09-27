@@ -37,13 +37,20 @@ typedef float* const float_stack_t, *float_heap_t;
 typedef double* const double_stack_t, *double_heap_t;
 ```
 
-- `x_stack_t` (const): zeigt auf Caller-allokierten Speicher (Stack).
-  Per Definition **nie NULL** → keine NULL-Prüfung erforderlich.
+- `x_stack_t`: der Zeiger ist **gültig — keine NULL-Prüfung nötig**. Es gibt zwei Sorten:
+  1. **Struct-Zeiger** (`typedef struct foo {...}* const foo_stack_t;`) — hier ist `const` das Merkmal
+     dieser Sorte (der Konsument schreibt nicht hindurch); der Speicher liegt meist beim Aufrufer.
+  2. **Funktionszeiger in `CLASS`** — `CLASS_METHOD_PTR_DECL` erzeugt `class_foo_bar_stack_t`. Hier ist
+     **nichts** const: die Zusage ist, dass `new()` jeden Methodenzeiger setzt. `new()` macht dafür genau
+     zwei Dinge — `malloc(sizeof(struct class_foo))` und das Initialisieren der Funktionszeiger.
 - `x_heap_t` (non-const): zeigt auf Heap-Speicher. **Kann NULL sein** →
   NULL-Prüfung Pflicht.
 - **Promotion:** Aus einem `x_heap_t` kann nach bestandener NULL-Prüfung
   ein `x_stack_t` werden — für den Konsumenten ist dann garantiert:
   gültig, kein Check nötig.
+- **NULL-fähige Stellen sind keine `x_stack_t`:** Rückgaben, die NULL sein können, sind `x_heap_t`
+  (nie `x_stack_t`); Member, die NULL sein dürfen, sind `struct foo*` (ein `x_stack_t`-Member ist `const`
+  und daher nicht zuweisbar).
 - Out-Parameter (Aufrufer-Stack) verwenden die `_stack_t`-Varianten.
 
 Strukturen folgen demselben Muster paarweise:
