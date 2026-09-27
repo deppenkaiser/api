@@ -9,9 +9,6 @@ target_sources(api PRIVATE
 	api.c
 )
 
-target_include_directories(api
-	PUBLIC
-		${CMAKE_CURRENT_SOURCE_DIR}/..
-	PRIVATE
-		${CMAKE_CURRENT_SOURCE_DIR}
+target_include_directories(api PUBLIC
+	${CMAKE_CURRENT_SOURCE_DIR}
 )
