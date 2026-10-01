@@ -1,7 +1,7 @@
 #pragma once
 
-#include <stdint.h>
 #include <stdbool.h>
+#include <stdint.h>
 
 #define protected_import(type, function) extern type function							// protected in this.lib declaration (*.h)
 
